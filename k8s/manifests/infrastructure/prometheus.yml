@@ -1,0 +1,67 @@
+global:
+  scrape_interval: 10s  # Adjust the scrape interval as needed
+  evaluation_interval: 10s  # Adjust evaluation interval as needed
+
+scrape_configs:
+  - job_name: 'api-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['192.168.189.1:8083']
+        labels:
+          application: 'API Gateway Service'
+
+  - job_name: 'review-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['192.168.189.1:8089']
+        labels:
+          application: 'Review Service Application'
+
+  - job_name: 'reservation-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['192.168.189.1:8081']
+        labels:
+          application: 'Reservation Service Application'
+
+  - job_name: 'flight-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['192.168.189.1:8080']
+        labels:
+          application: 'Flight Service Application'
+
+  - job_name: 'usermanagement-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['192.168.189.1:9093']
+        labels:
+          application: 'User Management Service'
+
+  - job_name: 'claimconnect-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['192.168.189.1:9096']
+        labels:
+          application: 'Claim Connect Service'
+
+  - job_name: 'passwordrecovery-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['192.168.189.1:8091']
+        labels:
+          application: 'Password Recovery Service'
+
+  - job_name: 'coupon-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['192.168.189.1:8090']
+        labels:
+          application: 'Coupon Service Application'
+
+  - job_name: 'weather-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['192.168.189.1:9086']
+        labels:
+          application: 'Weather Service Application'
