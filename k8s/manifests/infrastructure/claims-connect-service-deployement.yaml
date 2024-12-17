@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: claim-connect-service-deployment
+  namespace: default  # Adjust the namespace if necessary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: claim-connect-service
+  template:
+    metadata:
+      labels:
+        app: claim-connect-service
+    spec:
+      containers:
+        - name: claim-connect-service
+          image: ismail039/claim-connect-service:latest  # Replace with your image name and tag
+          ports:
+            - containerPort: 9096  # Expose the port defined in your application.properties
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: "claimconnect-service"
+            - name: SPRING_DATA_REDIS_HOST
+              value: "localhost"  # Adjust if Redis is running elsewhere
+            - name: SPRING_DATA_REDIS_PORT
+              value: "6369"
+            - name: SPRING_DATA_REDIS_PASSWORD
+              value: ""  # Add password if Redis is password-protected
+            - name: SPRING_DATA_REDIS_DATABASE
+              value: "0"
+            - name: SERVER_PORT
+              value: "9096"
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: "http://localhost:8761/eureka/"
+            - name: EUREKA_CLIENT_FETCH_REGISTRY
+              value: "true"
+            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+              value: "true"
+            - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+              value: "prometheus"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: claim-connect-service
+spec:
+  selector:
+    app: claim-connect-service
+  ports:
+    - port: 9096
+      targetPort: 9096  # Ensure this matches your application port
+  type: ClusterIP  # You can change to LoadBalancer if exposing externally

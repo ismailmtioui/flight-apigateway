@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-service-deployment
+  namespace: default  # Namespace is set to default, you can change it if necessary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-service
+  template:
+    metadata:
+      labels:
+        app: weather-service
+    spec:
+      containers:
+        - name: weather-service
+          image: ismail039/weather-service:latest  # Replace with your image name and tag
+          ports:
+            - containerPort: 9086  # Exposing port 9086 as in the Spring Boot configuration

@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usermanagement-service
+  labels:
+    app: usermanagement-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: usermanagement-service
+  template:
+    metadata:
+      labels:
+        app: usermanagement-service
+    spec:
+      containers:
+        - name: usermanagement-service
+          image: ismail039/usermanagement-service
+          ports:
+            - containerPort: 9093
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: "usermanagement-service"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://localhost:3306/user?createDatabaseIfNotExist=true"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "root"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: ""
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "update"
+            - name: SPRING_JPA_SHOW_SQL
+              value: "true"
+            - name: SERVER_PORT
+              value: "9093"
+            - name: SPRING_RABBITMQ_HOST
+              value: "localhost"
+            - name: SPRING_RABBITMQ_PORT
+              value: "5672"
+            - name: SPRING_RABBITMQ_USERNAME
+              value: "guest"
+            - name: SPRING_RABBITMQ_PASSWORD
+              value: "guest"
+            - name: SPRING_RABBITMQ_VIRTUAL_HOST
+              value: "/"
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: "http://localhost:8761/eureka/"
+            - name: EUREKA_CLIENT_FETCH_REGISTRY
+              value: "true"
+            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+              value: "true"
+            - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+              value: "prometheus"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: usermanagement-service
+spec:
+  selector:
+    app: usermanagement-service
+  ports:
+    - protocol: TCP
+      port: 9093
+      targetPort: 9093
+  type: ClusterIP
